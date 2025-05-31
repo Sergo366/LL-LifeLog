@@ -1,0 +1,30 @@
+.tiptap-button-group {
+  align-items: center;
+  display: flex;
+  gap: 0.125rem;
+  flex-direction: column;
+  background-color: var(--foregroundBlack);
+  border-radius: 5px;
+
+  button {
+    transition: all 0.2s ease-in-out;
+  }
+
+  button:hover{
+    cursor: pointer;
+    background-color: var(--gray-3);
+    border-radius: 5px;
+  }
+}
+
+.tiptap-button-group {
+  &[data-orientation="vertical"],
+  [data-orientation="vertical"] {
+    flex-direction: column;
+  }
+
+  &[data-orientation="horizontal"],
+  [data-orientation="horizontal"] {
+    flex-direction: row;
+  }
+}
