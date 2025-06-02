@@ -1,16 +1,24 @@
 import {
 	ConflictException,
 	Injectable,
-	InternalServerErrorException
+	InternalServerErrorException,
+	NotFoundException,
+	UnauthorizedException
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AuthMethod, User } from '@prisma/__generated__';
-import { Request } from 'express';
+import { verify } from 'argon2';
+import { Request, Response } from 'express';
+import { LoginDto } from '@/auth/dto/login.dto';
 import { RegisterDto } from '@/auth/dto/register.dto';
 import { UserService } from '@/user/user.service';
 
 @Injectable()
 export class AuthService {
-	public constructor(private readonly userService: UserService) {}
+	public constructor(
+		private readonly userService: UserService,
+		private readonly configService: ConfigService
+	) {}
 
 	public async register(req: Request, dto: RegisterDto) {
 		const isExist = await this.userService.findByEmail(dto.email);
@@ -32,9 +40,39 @@ export class AuthService {
 		return this.saveSession(req, newUser);
 	}
 
-	public async login() {}
+	public async login(req: Request, dto: LoginDto) {
+		const user = await this.userService.findByEmail(dto.email);
 
-	public async logout() {}
+		if (!user || !user.password) {
+			throw new NotFoundException('User not found. Please check your data');
+		}
+
+		const isValidPassword = await verify(user.password, dto.password);
+		if (!isValidPassword) {
+			throw new UnauthorizedException(
+				'Password is incorrect. Please try again or reset your password.'
+			);
+		}
+
+		return this.saveSession(req, user);
+	}
+
+	public async logout(req: Request, res: Response): Promise<void> {
+		return new Promise((resolve, reject) => {
+			req.session.destroy(err => {
+				if (err) {
+					return reject(
+						new InternalServerErrorException(
+							'Failed to destroy session. Please check your session configuration.'
+						)
+					);
+				}
+
+				res.clearCookie(this.configService.getOrThrow<string>('SESSION_NAME'));
+				resolve();
+			});
+		});
+	}
 
 	public async saveSession(req: Request, user: User) {
 		return new Promise((res, rej) => {
