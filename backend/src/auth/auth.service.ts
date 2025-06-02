@@ -1,4 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { AuthMethod, User } from '@prisma/__generated__';
+import { RegisterDto } from '@/auth/dto/register.dto';
+import { UserService } from '@/user/user.service';
 
 @Injectable()
-export class AuthService {}
+export class AuthService {
+	public constructor(private readonly userService: UserService) {}
+
+	public async register(req: Request, dto: RegisterDto) {
+		const isExist = await this.userService.findByEmail(dto.email);
+
+		if (isExist) {
+			throw new ConflictException(
+				'Email is already in use. Please choose another one.'
+			);
+		}
+		const newUser = await this.userService.create(
+			dto.email,
+			dto.name,
+			dto.password,
+			'',
+			AuthMethod.CREDENTIALS,
+			false
+		);
+
+		return this.saveSession(req, newUser);
+	}
+
+	public async login() {}
+
+	public async logout() {}
+
+	public saveSession(req: Request, ser: User) {}
+}
