@@ -1,5 +1,10 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+	ConflictException,
+	Injectable,
+	InternalServerErrorException
+} from '@nestjs/common';
 import { AuthMethod, User } from '@prisma/__generated__';
+import { Request } from 'express';
 import { RegisterDto } from '@/auth/dto/register.dto';
 import { UserService } from '@/user/user.service';
 
@@ -31,5 +36,20 @@ export class AuthService {
 
 	public async logout() {}
 
-	public saveSession(req: Request, ser: User) {}
+	public async saveSession(req: Request, user: User) {
+		return new Promise((res, rej) => {
+			req.session.userId = user.id;
+
+			req.session.save(err => {
+				if (err) {
+					return rej(
+						new InternalServerErrorException(
+							'Failed to save session. Please check your session configuration.'
+						)
+					);
+				}
+				res(user);
+			});
+		});
+	}
 }
