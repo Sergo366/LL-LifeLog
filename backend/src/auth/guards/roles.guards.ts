@@ -17,7 +17,7 @@ export class RolesGuard implements CanActivate {
 			context.getHandler(),
 			context.getClass()
 		]);
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 		const request = context.switchToHttp().getRequest();
 
 		if (!roles) return true;
