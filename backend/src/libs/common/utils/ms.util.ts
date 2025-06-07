@@ -108,8 +108,7 @@ export function ms(str: StringValue): number {
 			return n;
 		default:
 			throw new Error(
-				// eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-				`The time unit ${type} was recognized, but there is no corresponding case for it. Please check the input data.`
+				`Ошибка: единица времени ${type} была распознана, но не существует соответствующего случая. Пожалуйста, проверьте введенные данные.`
 			);
 	}
 }

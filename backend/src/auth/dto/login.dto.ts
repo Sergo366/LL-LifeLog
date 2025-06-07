@@ -7,14 +7,14 @@ import {
 } from 'class-validator';
 
 export class LoginDto {
-	@IsString({ message: 'Email must be a string.' })
-	@IsEmail({}, { message: 'Invalid email format.' })
-	@IsNotEmpty({ message: 'Email is required.' })
+	@IsString({ message: 'Email должен быть строкой.' })
+	@IsEmail({}, { message: 'Некорректный формат email.' })
+	@IsNotEmpty({ message: 'Email обязателен для заполнения.' })
 	email: string;
 
-	@IsString({ message: 'Password must be a string.' })
-	@IsNotEmpty({ message: 'Password field cannot be empty.' })
-	@MinLength(6, { message: 'Password must be at least 6 characters long.' })
+	@IsString({ message: 'Пароль должен быть строкой.' })
+	@IsNotEmpty({ message: 'Поле пароль не может быть пустым.' })
+	@MinLength(6, { message: 'Пароль должен содержать не менее 6 символов.' })
 	password: string;
 
 	@IsOptional()

@@ -15,6 +15,6 @@ export class IsPasswordsMatchingConstraint
 	}
 
 	public defaultMessage(validationArguments?: ValidationArguments) {
-		return 'The passwords do not match';
+		return 'Пароли не совпадают';
 	}
 }

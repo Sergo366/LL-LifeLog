@@ -14,11 +14,15 @@ export class AuthGuard implements CanActivate {
 		const request = context.switchToHttp().getRequest();
 
 		if (typeof request.session.userId === 'undefined') {
-			throw new UnauthorizedException('User is not authenticated.');
+			throw new UnauthorizedException(
+				'Пользователь не авторизован. Пожалуйста, войдите в систему, чтобы получить доступ.'
+			);
 		}
 
 		const user = await this.userService.findById(request.session.userId);
+
 		request.user = user;
+
 		return true;
 	}
 }
