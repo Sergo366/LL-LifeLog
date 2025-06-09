@@ -23,7 +23,11 @@ export class UsersService {
     return this.repo.find({ where: { email } });
   }
 
-  update(id: number, email: string, password: string) {}
+  update(id: number, email: string, password: string) {
+    console.log('id', id, 'email', email, 'password', password);
+  }
 
-  remove(id: number) {}
+  remove(id: number) {
+    console.log('id', id);
+  }
 }
