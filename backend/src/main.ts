@@ -1,11 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import cookieSession from 'cookie-session';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const cookieSession = require('cookie-session');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     cookieSession({
       keys: ['default_key'],
     }),
