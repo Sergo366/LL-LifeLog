@@ -15,6 +15,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDto } from './dto/user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
 import { AuthService } from './Auth.service';
+import { CurrentUserDecorator } from './decorators/current-user.decorator';
+import { User } from './user.entity';
 
 @Controller('auth')
 @Serialize(UserDto)
@@ -25,8 +27,8 @@ export class UsersController {
   ) {}
 
   @Get('/whoami')
-  whoAmI(@Session() session: any) {
-    return this.usersService.findOne(session.userId);
+  whoAmI(@CurrentUserDecorator() user: User) {
+    return user;
   }
 
   @Post('/signout')
