@@ -13,7 +13,7 @@ const scrypt = promisify(_scrypt);
 export class AuthService {
   constructor(private readonly usersService: UsersService) {}
 
-  async singUp(email: string, password: string) {
+  async signUp(email: string, password: string) {
     const user = await this.usersService.find(email);
     if (user.length) {
       throw new BadRequestException('User already exists');
