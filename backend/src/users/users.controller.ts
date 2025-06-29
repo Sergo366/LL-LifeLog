@@ -1,22 +1,23 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
   Post,
+  Get,
+  Patch,
+  Delete,
+  Param,
   Query,
+  NotFoundException,
   Session,
   UseGuards,
 } from '@nestjs/common';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { UserDto } from './dto/user.dto';
 import { Serialize } from '../interceptors/serialize.interceptor';
-import { AuthService } from './Auth.service';
-import { CurrentUserDecorator } from './decorators/current-user.decorator';
+import { UserDto } from './dtos/user.dto';
+import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { User } from './user.entity';
 import { AuthGuard } from '../guards/auth.guard';
 
@@ -24,43 +25,45 @@ import { AuthGuard } from '../guards/auth.guard';
 @Serialize(UserDto)
 export class UsersController {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly authService: AuthService,
+    private usersService: UsersService,
+    private authService: AuthService,
   ) {}
 
-  @UseGuards(AuthGuard)
   @Get('/whoami')
-  whoAmI(@CurrentUserDecorator() user: User) {
+  @UseGuards(AuthGuard)
+  whoAmI(@CurrentUser() user: User) {
     return user;
   }
 
-  @UseGuards(AuthGuard)
   @Post('/signout')
   signOut(@Session() session: any) {
     session.userId = null;
-    return { message: 'User signed out successfully' };
   }
 
   @Post('/signup')
   async createUser(@Body() body: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.signUp(body.email, body.password);
+    const user = await this.authService.signup(body.email, body.password);
     session.userId = user.id;
     return user;
   }
 
   @Post('/signin')
-  async signIn(@Body() body: CreateUserDto, @Session() session: any) {
-    const user = await this.authService.signIn(body.email, body.password);
+  async signin(@Body() body: CreateUserDto, @Session() session: any) {
+    const user = await this.authService.signin(body.email, body.password);
     session.userId = user.id;
     return user;
   }
 
   @Get('/:id')
-  findUser(@Param('id') id: string) {
-    return this.usersService.findOne(parseInt(id));
+  async findUser(@Param('id') id: string) {
+    const user = await this.usersService.findOne(parseInt(id));
+    if (!user) {
+      throw new NotFoundException('user not found');
+    }
+    return user;
   }
 
-  @Get('')
+  @Get()
   findAllUsers(@Query('email') email: string) {
     return this.usersService.find(email);
   }
@@ -71,7 +74,7 @@ export class UsersController {
   }
 
   @Patch('/:id')
-  updateUser(@Param('id') id: string, @Body() body: Partial<UpdateUserDto>) {
+  updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.usersService.update(parseInt(id), body);
   }
 }

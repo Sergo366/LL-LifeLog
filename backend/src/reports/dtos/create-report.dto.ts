@@ -1,10 +1,10 @@
 import {
-  IsNumber,
   IsString,
+  IsNumber,
   Min,
   Max,
-  IsLatitude,
   IsLongitude,
+  IsLatitude,
 } from 'class-validator';
 
 export class CreateReportDto {
@@ -21,18 +21,17 @@ export class CreateReportDto {
 
   @IsNumber()
   @Min(0)
-  @Max(1_000_000)
-  price: number;
-
-  @IsNumber()
-  @Min(0)
-  @Max(1_000_000)
+  @Max(1000000)
   mileage: number;
 
   @IsLongitude()
   lng: number;
 
-  @IsNumber()
   @IsLatitude()
   lat: number;
+
+  @IsNumber()
+  @Min(0)
+  @Max(1000000)
+  price: number;
 }

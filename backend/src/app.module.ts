@@ -4,10 +4,9 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ReportsModule } from './reports/reports.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from './users/entity.user';
-import { ReportsEntity } from './reports/reports.entity';
 import { APP_PIPE } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { User } from './users/user.entity';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const cookieSession = require('cookie-session');
 
@@ -23,7 +22,7 @@ const cookieSession = require('cookie-session');
         return {
           type: 'sqlite',
           database: config.get<string>('DB_NAME'),
-          entities: [UserEntity, ReportsEntity],
+          entities: [User, Report],
           synchronize: true,
         };
       },
