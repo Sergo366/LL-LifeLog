@@ -43,12 +43,13 @@ const cookieSession = require('cookie-session');
   ],
 })
 export class AppModule {
+  constructor(private readonly configService: ConfigService) {}
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         cookieSession({
-          keys: ['default_key'],
+          keys: [this.configService.get<string>('COOKIE_KEY')],
         }),
       )
       .forRoutes('*');
