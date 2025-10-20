@@ -12,12 +12,21 @@
 }
 
 .goalContent {
-    padding: 10px;
+    padding-top: 10px;
     border-top: 1px solid var(--gray-2);
+    color: var(--text-1);
 }
 
 .element {
     display: flex;
     gap: 10px;
     align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gray-3);
+}
+
+.elementActions {
+    display: flex;
+    gap: 10px;
 }

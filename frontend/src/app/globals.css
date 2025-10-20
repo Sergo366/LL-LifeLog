@@ -10,6 +10,8 @@
   --gray-1: rgb(32, 39, 46);
   --gray-2: rgb(211, 211, 211);
   --gray-3: #2c2c2c;
+
+    --text-1: rgb(145, 158, 171);
 }
 
 @media (prefers-color-scheme: dark) {
