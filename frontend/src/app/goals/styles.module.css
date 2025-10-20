@@ -1,0 +1,23 @@
+.wrapper {
+    width: var(--contentWidth-s);
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.goalHeader {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.goalContent {
+    padding: 10px;
+    border-top: 1px solid var(--gray-2);
+}
+
+.element {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}

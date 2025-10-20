@@ -9,11 +9,15 @@
 }
 
 .navigation {
-    width: var(--contentWidth-l);
+    width: var(--contentWidth-s);
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 24px;
+}
+
+.navigation img {
+    margin-top: 10px;
 }
 
 .navList {

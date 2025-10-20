@@ -1,6 +1,6 @@
 .calendar {
     display: flex;
-    width: var(--contentWidth-l);
+    width: var(--contentWidth-s);
     gap: 20px;
     justify-content: center;
     margin: 20px 0;

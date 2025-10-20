@@ -1,6 +1,7 @@
 :root {
   --backgroundWhite: #ffffff;
   --foregroundBlack: #171717;
+  --contentWidth-xs: 1000px;
   --contentWidth-s: 1200px;
   --contentWidth-l: 1400px;
   --contentWidth-xl: 1600px;
@@ -55,6 +56,6 @@ ul, ol {
 }
 
 .container {
-  width: var(--contentWidth-l);
+  width: var(--contentWidth-s);
   margin: 0 auto;
 }
