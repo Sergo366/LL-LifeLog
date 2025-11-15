@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
 	const refresh = req.cookies.get('refresh_token')?.value;
 
 	// 1. Пропускаем /login
-	if (url.pathname.startsWith('/login')) {
+	if (url.pathname.startsWith('/')) {
 		return NextResponse.next();
 	}
 
