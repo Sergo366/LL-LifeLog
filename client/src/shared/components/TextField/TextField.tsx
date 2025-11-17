@@ -1,25 +1,25 @@
 import React from 'react';
-import { TextField, TextFieldProps } from '@mui/material';
-import { Controller, Control, FieldValues } from 'react-hook-form';
+import { TextField as MuiTextFiled, TextFieldProps } from '@mui/material';
+import { Controller, Control, FieldValues, Path } from 'react-hook-form'; // Import FieldValues and Path
 
-type ControlledTextFieldProps = TextFieldProps & {
-	name: string;
-	control: Control<FieldValues>;
+type ControlledTextFieldProps<TFieldValues extends FieldValues> = TextFieldProps & {
+	name: Path<TFieldValues>;
+	control: Control<TFieldValues>;
 	label: string;
 };
 
-const ControlledTextField: React.FC<ControlledTextFieldProps> = ({
+export const TextField = <TFieldValues extends FieldValues>({
 	name,
 	control,
 	label,
 	...rest
-}) => {
+}: ControlledTextFieldProps<TFieldValues>) => {
 	return (
 		<Controller
 			name={name}
 			control={control}
 			render={({ field, fieldState: { error } }) => (
-				<TextField
+				<MuiTextFiled
 					{...field}
 					{...rest}
 					label={label}
@@ -32,5 +32,3 @@ const ControlledTextField: React.FC<ControlledTextFieldProps> = ({
 		/>
 	);
 };
-
-export default ControlledTextField;
