@@ -66,9 +66,6 @@ export async function middleware(req: NextRequest) {
 	return NextResponse.redirect(url);
 }
 
-// ==========================
-//  Middleware на всё, кроме login
-// ==========================
 export const config = {
-	matcher: ['/((?!login).*)'],
+	matcher: ['/((?!api|_next/static|_next/image|favicon.ico|login|manifest.json).*)'],
 };

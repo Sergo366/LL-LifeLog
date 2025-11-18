@@ -13,11 +13,9 @@ export default function MainLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en">
-			<body>
-				<Header />
-				{children}
-			</body>
-		</html>
+		<>
+			<Header />
+			{children}
+		</>
 	);
 }

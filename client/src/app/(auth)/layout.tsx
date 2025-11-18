@@ -5,10 +5,10 @@ export const metadata: Metadata = {
 	description: 'Login page',
 };
 
-export default function LoginLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
 	return (
 		<html lang="en">
-			<body>{children}</body>
+			<body style={{ margin: 0 }}>{children}</body>
 		</html>
 	);
 }

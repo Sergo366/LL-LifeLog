@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import QueryProvider from '@/shared/providers/QueryProvider/QueryProvider';
+import { QueryProvider } from '@/shared/providers/QueryProvider/QueryProvider';
 
 export const metadata: Metadata = {
 	title: 'Life | Home page',

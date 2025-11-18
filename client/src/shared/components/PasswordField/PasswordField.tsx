@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client';
+
+import { useState } from 'react';
 import { TextField, TextFieldProps, IconButton, InputAdornment } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -41,6 +43,9 @@ export const PasswordField = <TFieldValues extends FieldValues>({
 					type={showPassword ? 'text' : 'password'}
 					error={!!error}
 					helperText={error ? error.message : helperText}
+					InputLabelProps={{
+						shrink: true,
+					}}
 					InputProps={{
 						endAdornment: (
 							<InputAdornment position="end">

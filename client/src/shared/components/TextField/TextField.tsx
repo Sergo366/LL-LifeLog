@@ -1,4 +1,5 @@
-import React from 'react';
+'use client';
+
 import { TextField as MuiTextFiled, TextFieldProps } from '@mui/material';
 import { Controller, Control, FieldValues, Path } from 'react-hook-form'; // Import FieldValues and Path
 
@@ -27,6 +28,9 @@ export const TextField = <TFieldValues extends FieldValues>({
 					fullWidth
 					error={!!error}
 					helperText={error ? error.message : rest.helperText}
+					InputLabelProps={{
+						shrink: true,
+					}}
 				/>
 			)}
 		/>
