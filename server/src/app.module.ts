@@ -4,9 +4,15 @@ import { AppService } from './app.service';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOption } from '../db/data-source';
+import { ArticlesModule } from './articles/articles.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(dataSourceOption)],
+  imports: [
+    TypeOrmModule.forRoot(dataSourceOption),
+    ArticlesModule,
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,
