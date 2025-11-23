@@ -1,6 +1,15 @@
+import { IsString } from 'class-validator';
+
 export class CreateArticleDto {
+  @IsString()
   title: string;
+
+  @IsString()
   text: string;
+
+  @IsString()
   description: string;
+
+  @IsString()
   tags: string;
 }

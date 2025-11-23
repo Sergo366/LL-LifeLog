@@ -5,12 +5,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ArticleEntity } from '../shared/models/article.entity';
 import { Repository } from 'typeorm';
 import { UserEntity } from '../shared/models/user.entity';
+import { UpdateArticleDto } from './dto/update-article.dto';
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(ArticleEntity)
-    private readonly articlesRepository: Repository<ArticleEntity>,
+    private readonly articlesRepo: Repository<ArticleEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
   ) {}
@@ -38,24 +39,56 @@ export class ArticlesService {
     article.tags = data.tags;
     article.author = user;
 
-    const res = await this.articlesRepository.save(article);
+    const res = await this.articlesRepo.save(article);
 
     return new ArticleDto(res);
   }
 
-  getList() {
-    console.log('Getting list of articles');
+  async getList() {
+    const articles = await this.articlesRepo.find();
+    return articles.map((article) => new ArticleDto(article));
   }
 
-  getById(id: number) {
-    console.log(`Getting article by id: ${id}`);
+  async getById(id: number) {
+    const article = await this.articlesRepo
+      .findOne({
+        where: { id },
+      })
+      .catch((err) => {
+        console.log(err);
+        return err;
+      });
+
+    if (!article) {
+      throw new NotFoundException('Article not found');
+    }
+
+    return new ArticleDto(article);
   }
 
-  updateById(id: number) {
-    console.log(`Update article by id: ${id}`);
+  async updateById(id: number, article: UpdateArticleDto) {
+    await this.articlesRepo
+      .update(
+        { id },
+        {
+          title: article.title,
+          text: article.text,
+          description: article.description,
+          tags: article.tags,
+        },
+      )
+      .catch((err) => {
+        console.log(err);
+        return err;
+      });
+
+    return this.getById(id);
   }
 
-  deleteById(id: number) {
-    console.log(`Delete article by id: ${id}`);
+  async deleteById(id: number) {
+    await this.articlesRepo.delete(id).catch((err) => {
+      console.log(err);
+      return err;
+    });
   }
 }
