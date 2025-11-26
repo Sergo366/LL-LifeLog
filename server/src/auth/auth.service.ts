@@ -10,10 +10,16 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { SignUpDto } from './dto/sign-up.dto';
 import { UserEntity } from '../shared/models/user.entity';
+import { MoreThan, Repository } from 'typeorm';
+import { RefreshTokenEntity } from '../shared/models/refresh-token.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { randomBytes } from 'node:crypto';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectRepository(RefreshTokenEntity)
+    private refreshTokenRepo: Repository<RefreshTokenEntity>,
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
@@ -49,6 +55,10 @@ export class AuthService {
     return this.getTokens(newUser);
   }
 
+  private generateSecureToken(): string {
+    return randomBytes(48).toString('base64url');
+  }
+
   async getTokens(user: UserEntity): Promise<SignInResponseDto> {
     const payload = {
       id: user.id,
@@ -56,8 +66,31 @@ export class AuthService {
       email: user.email,
       role: user.role,
     };
+    const refreshToken = new RefreshTokenEntity();
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+
+    refreshToken.token = this.generateSecureToken();
+    refreshToken.expires = expires;
+    refreshToken.user = user;
+    const newRefreshToken = await refreshToken.save();
+
     const accessToken = await this.jwtService.signAsync(payload);
 
-    return new SignInResponseDto(accessToken, 'refresh');
+    return new SignInResponseDto(accessToken, newRefreshToken.token);
+  }
+
+  async refreshToken(token: string): Promise<SignInResponseDto> {
+    const now = new Date();
+    const refToken = await this.refreshTokenRepo.findOne({
+      relations: ['user'],
+      where: { token, expires: MoreThan(now) },
+    });
+
+    if (!refToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    return this.getTokens(refToken.user);
   }
 }
