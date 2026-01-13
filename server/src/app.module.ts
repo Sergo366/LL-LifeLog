@@ -22,6 +22,12 @@ import { AuthModule } from './auth/auth.module';
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         whitelist: true,
+        disableErrorMessages: false,
+        validationError: { target: false, value: false },
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
       }),
     },
   ],
