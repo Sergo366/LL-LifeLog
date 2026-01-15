@@ -1,5 +1,5 @@
 import { formNames } from '@/app/(auth)/login/const';
-import { hostUrl } from '@/services/const';
+import { fetchClient } from '@/services/api-client';
 
 type Params = {
 	[formNames.login]: string;
@@ -7,14 +7,8 @@ type Params = {
 };
 
 export const loginUser = async (params: Params) => {
-	const response = await fetch(`${hostUrl}/auth/login`, {
+	return fetchClient('/auth/sign-in', {
 		method: 'POST',
 		body: JSON.stringify(params),
 	});
-
-	if (!response.ok) {
-		const errorBody = await response.json();
-		throw new Error(errorBody.message || 'Ошибка авторизации');
-	}
-	return response.json();
 };

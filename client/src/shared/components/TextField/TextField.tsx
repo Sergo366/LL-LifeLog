@@ -22,6 +22,7 @@ export const TextField = <TFieldValues extends FieldValues>({
 			render={({ field, fieldState: { error } }) => (
 				<MuiTextFiled
 					{...field}
+					value={field.value ?? ''}
 					{...rest}
 					label={label}
 					margin="normal"

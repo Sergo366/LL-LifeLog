@@ -36,6 +36,7 @@ export const PasswordField = <TFieldValues extends FieldValues>({
 			render={({ field, fieldState: { error } }) => (
 				<TextField
 					{...field}
+					value={field.value ?? ''}
 					{...rest}
 					label={label}
 					margin="normal"
